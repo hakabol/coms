@@ -2,8 +2,7 @@ use std::net::{TcpListener, TcpStream};
 use std::io::{Read, Write};
 
 use std::io;
-use std::thread::sleep;
-use std::time::Duration;
+use tokio::time::{sleep, Duration};
 
 use std::process::Command;
 
@@ -115,9 +114,6 @@ async fn main() -> eframe::Result<()>{
     io::stdin().read_line(&mut rec_ip).unwrap();
     rec_ip = rec_ip.trim_end().to_string();
 
-    rec_ip = "127.0.0.1:3000".to_string();
-    lis_ip = "127.0.0.1:3001".to_string();
-
     tokio::spawn(
             reciver(lis_ip.clone()),
     );
@@ -136,7 +132,7 @@ async fn sender(ip: String){
         APP.lock().unwrap().messages = vec!["waiting for connection......".to_string()];
     }
 
-    sleep(Duration::from_millis(30));
+    sleep(Duration::from_millis(30)).await;
 
     loop{
         match TcpStream::connect(&ip){
