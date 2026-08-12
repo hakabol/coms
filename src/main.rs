@@ -78,18 +78,16 @@ impl eframe::App for ComsApp {
 pub static APP: LazyLock<Mutex<ComsApp>> = LazyLock::new(|| {Mutex::new(ComsApp::default()) });
 
 fn get_ip() -> String{
-    //let output = Command::new("curl")
-    //    .arg("-4")
-    //    .arg("ifconfig.me")
-    //    .output()
-    //    .unwrap();
+    let output = Command::new("curl")
+        .arg("-4")
+        .arg("ifconfig.me")
+        .output()
+        .unwrap();
 
-    //String::from_utf8(output.stdout)
-    //    .unwrap()
-    //    .trim()
-    //    .to_string()
-
-    "127.0.0.1".to_string()
+    String::from_utf8(output.stdout)
+        .unwrap()
+        .trim()
+        .to_string()
 }
 
 #[tokio::main]
