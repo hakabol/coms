@@ -160,12 +160,22 @@ async fn sender(ip: String){
                 app.input.clear();
             }
         }
-        sleep(Duration::from_millis(20));
+        sleep(Duration::from_millis(20)).await;
     }
 }
 
 async fn reciver(ip: String){
-    let listener = TcpListener::bind(ip).unwrap();
+    let listener: TcpListener;
+    loop{
+        match TcpListener::bind(&ip){
+            Ok(x) => {
+                listener = x;
+                break;
+
+            }
+            Err(_) => {}
+        }
+    }
 
     for stream in listener.incoming(){
         match stream{
